@@ -183,7 +183,9 @@ results are written to `results/test_demo` by default.
 ```bash
 MINI_BATCHSIZE=5 python scripts/test.py ./blade/configs/blade_posenet.py --work-dir=./work_dirs/eval_test --out ./work_dirs/eval_test/test.out --data-name <spec_mtp_p3 or humman_p3 or pdhuman_p5> --checkpoint ./pretrained/epoch_2.pth
 ```
-> **Note**: Can be slow due to SMPL-X -> SMPL conversion, which is needed for evaluation on SMPL datasets.
+> **Note**: 
+> 1. Depth accuracy is most important for close-range cases (e.g. < 1m) due to inverse relationship to depth during perspective distortion. As depth increases, the image approximates orthographic projection and depth becomes much less important.
+> 2. Can be slow due to SMPL-X -> SMPL conversion, which is needed for evaluation on SMPL datasets.
 > Also much faster locally comparing to running on servers
 
 ## 🏋️ Training
