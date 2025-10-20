@@ -261,6 +261,8 @@ For Slurm-like clusters, see [MULTI_NODE_TRAINING.md](docs/MULTI_NODE_TRAINING.m
 
 ### Reproduced Numbers versus in the Paper
 *Note:* ↓ means lower is better; ↑ means higher is better.
+
+Numbers can be slightly different each time due to randomness in camera optimization. 
 ### SPEC-MTP (in-the-wild capture)
 | Method     | Tz (m) ↓ | 1/Tz ↓ | Txy (m) ↓ | f (%) ↓ | PA-MPJPE ↓ | MPJPE ↓ | PVE ↓ | mIoU ↑ | P-mIoU ↑ |
 |------------|---:|---:|---:|---:|-----------:|--------:|------:|-------:|---------:|
