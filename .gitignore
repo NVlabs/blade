@@ -127,9 +127,7 @@ test/
 
 # Visualization
 *.mp4
-*.png
 *.gif
-#*.jpg
 *.obj
 *.ply
 !demo/resources/*
