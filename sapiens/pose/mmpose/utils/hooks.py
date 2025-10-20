@@ -1,0 +1,88 @@
+# Not a contribution
+# Changes made by NVIDIA CORPORATION & AFFILIATES enabling BLADE or otherwise documented as
+# NVIDIA-proprietary are not a contribution and subject to the following terms and conditions:
+#
+# SPDX-FileCopyrightText: Copyright (c) 2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: LicenseRef-NvidiaProprietary
+#
+# NVIDIA CORPORATION, its affiliates and licensors retain all intellectual
+# property and proprietary rights in and to this material, related
+# documentation and any modifications thereto. Any use, reproduction,
+# disclosure or distribution of this material and related documentation
+# without an express license agreement from NVIDIA CORPORATION or
+# its affiliates is strictly prohibited.
+#
+# SPDX-FileCopyrightText: Copyright (c) 2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: LicenseRef-NvidiaProprietary
+#
+# NVIDIA CORPORATION, its affiliates and licensors retain all intellectual
+# property and proprietary rights in and to this material, related
+# documentation and any modifications thereto. Any use, reproduction,
+# disclosure or distribution of this material and related documentation
+# without an express license agreement from NVIDIA CORPORATION or
+# its affiliates is strictly prohibited.
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+import functools
+
+
+class OutputHook:
+
+    def __init__(self, module, outputs=None, as_tensor=False):
+        self.outputs = outputs
+        self.as_tensor = as_tensor
+        self.layer_outputs = {}
+        self.register(module)
+
+    def register(self, module):
+
+        def hook_wrapper(name):
+
+            def hook(model, input, output):
+                if self.as_tensor:
+                    self.layer_outputs[name] = output
+                else:
+                    if isinstance(output, list):
+                        self.layer_outputs[name] = [
+                            out.detach().cpu().numpy() for out in output
+                        ]
+                    else:
+                        self.layer_outputs[name] = output.detach().cpu().numpy(
+                        )
+
+            return hook
+
+        self.handles = []
+        if isinstance(self.outputs, (list, tuple)):
+            for name in self.outputs:
+                try:
+                    layer = rgetattr(module, name)
+                    h = layer.register_forward_hook(hook_wrapper(name))
+                except ModuleNotFoundError as module_not_found:
+                    raise ModuleNotFoundError(
+                        f'Module {name} not found') from module_not_found
+                self.handles.append(h)
+
+    def remove(self):
+        for h in self.handles:
+            h.remove()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.remove()
+
+
+# using wonder's beautiful simplification:
+# https://stackoverflow.com/questions/31174295/getattr-and-setattr-on-nested-objects
+def rgetattr(obj, attr, *args):
+
+    def _getattr(obj, attr):
+        return getattr(obj, attr, *args)
+
+    return functools.reduce(_getattr, [obj] + attr.split('.'))

@@ -1,0 +1,13 @@
+# Exclude large files and directories that are not needed for the build
+blade_pred.zip
+work_dirs/
+DAv2/metric_depth/checkpoints
+aios_repo/data
+body_models/
+cache/
+mmhuman_data/
+sapiens/checkpoints/
+smplx_repo/transfer_data
+trained_networks/
+outputs/
+*.egg-info

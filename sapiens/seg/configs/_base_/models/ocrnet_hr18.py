@@ -1,0 +1,105 @@
+# Not a contribution
+# Changes made by NVIDIA CORPORATION & AFFILIATES enabling BLADE or otherwise documented as
+# NVIDIA-proprietary are not a contribution and subject to the following terms and conditions:
+#
+# SPDX-FileCopyrightText: Copyright (c) 2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: LicenseRef-NvidiaProprietary
+#
+# NVIDIA CORPORATION, its affiliates and licensors retain all intellectual
+# property and proprietary rights in and to this material, related
+# documentation and any modifications thereto. Any use, reproduction,
+# disclosure or distribution of this material and related documentation
+# without an express license agreement from NVIDIA CORPORATION or
+# its affiliates is strictly prohibited.
+#
+# SPDX-FileCopyrightText: Copyright (c) 2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: LicenseRef-NvidiaProprietary
+#
+# NVIDIA CORPORATION, its affiliates and licensors retain all intellectual
+# property and proprietary rights in and to this material, related
+# documentation and any modifications thereto. Any use, reproduction,
+# disclosure or distribution of this material and related documentation
+# without an express license agreement from NVIDIA CORPORATION or
+# its affiliates is strictly prohibited.
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+# model settings
+norm_cfg = dict(type='SyncBN', requires_grad=True)
+data_preprocessor = dict(
+    type='SegDataPreProcessor',
+    mean=[123.675, 116.28, 103.53],
+    std=[58.395, 57.12, 57.375],
+    bgr_to_rgb=True,
+    pad_val=0,
+    seg_pad_val=255)
+model = dict(
+    type='CascadeEncoderDecoder',
+    data_preprocessor=data_preprocessor,
+    num_stages=2,
+    pretrained='open-mmlab://msra/hrnetv2_w18',
+    backbone=dict(
+        type='HRNet',
+        norm_cfg=norm_cfg,
+        norm_eval=False,
+        extra=dict(
+            stage1=dict(
+                num_modules=1,
+                num_branches=1,
+                block='BOTTLENECK',
+                num_blocks=(4, ),
+                num_channels=(64, )),
+            stage2=dict(
+                num_modules=1,
+                num_branches=2,
+                block='BASIC',
+                num_blocks=(4, 4),
+                num_channels=(18, 36)),
+            stage3=dict(
+                num_modules=4,
+                num_branches=3,
+                block='BASIC',
+                num_blocks=(4, 4, 4),
+                num_channels=(18, 36, 72)),
+            stage4=dict(
+                num_modules=3,
+                num_branches=4,
+                block='BASIC',
+                num_blocks=(4, 4, 4, 4),
+                num_channels=(18, 36, 72, 144)))),
+    decode_head=[
+        dict(
+            type='FCNHead',
+            in_channels=[18, 36, 72, 144],
+            channels=sum([18, 36, 72, 144]),
+            in_index=(0, 1, 2, 3),
+            input_transform='resize_concat',
+            kernel_size=1,
+            num_convs=1,
+            concat_input=False,
+            dropout_ratio=-1,
+            num_classes=19,
+            norm_cfg=norm_cfg,
+            align_corners=False,
+            loss_decode=dict(
+                type='CrossEntropyLoss', use_sigmoid=False, loss_weight=0.4)),
+        dict(
+            type='OCRHead',
+            in_channels=[18, 36, 72, 144],
+            in_index=(0, 1, 2, 3),
+            input_transform='resize_concat',
+            channels=512,
+            ocr_channels=256,
+            dropout_ratio=-1,
+            num_classes=19,
+            norm_cfg=norm_cfg,
+            align_corners=False,
+            loss_decode=dict(
+                type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0)),
+    ],
+    # model training and testing settings
+    train_cfg=dict(),
+    test_cfg=dict(mode='whole'))

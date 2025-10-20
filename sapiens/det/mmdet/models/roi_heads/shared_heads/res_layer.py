@@ -1,0 +1,107 @@
+# Not a contribution
+# Changes made by NVIDIA CORPORATION & AFFILIATES enabling BLADE or otherwise documented as
+# NVIDIA-proprietary are not a contribution and subject to the following terms and conditions:
+#
+# SPDX-FileCopyrightText: Copyright (c) 2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: LicenseRef-NvidiaProprietary
+#
+# NVIDIA CORPORATION, its affiliates and licensors retain all intellectual
+# property and proprietary rights in and to this material, related
+# documentation and any modifications thereto. Any use, reproduction,
+# disclosure or distribution of this material and related documentation
+# without an express license agreement from NVIDIA CORPORATION or
+# its affiliates is strictly prohibited.
+#
+# SPDX-FileCopyrightText: Copyright (c) 2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: LicenseRef-NvidiaProprietary
+#
+# NVIDIA CORPORATION, its affiliates and licensors retain all intellectual
+# property and proprietary rights in and to this material, related
+# documentation and any modifications thereto. Any use, reproduction,
+# disclosure or distribution of this material and related documentation
+# without an express license agreement from NVIDIA CORPORATION or
+# its affiliates is strictly prohibited.
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+import warnings
+
+import torch.nn as nn
+from mmengine.model import BaseModule
+
+from mmdet.models.backbones import ResNet
+from mmdet.models.layers import ResLayer as _ResLayer
+from mmdet.registry import MODELS
+
+
+@MODELS.register_module()
+class ResLayer(BaseModule):
+
+    def __init__(self,
+                 depth,
+                 stage=3,
+                 stride=2,
+                 dilation=1,
+                 style='pytorch',
+                 norm_cfg=dict(type='BN', requires_grad=True),
+                 norm_eval=True,
+                 with_cp=False,
+                 dcn=None,
+                 pretrained=None,
+                 init_cfg=None):
+        super(ResLayer, self).__init__(init_cfg)
+
+        self.norm_eval = norm_eval
+        self.norm_cfg = norm_cfg
+        self.stage = stage
+        self.fp16_enabled = False
+        block, stage_blocks = ResNet.arch_settings[depth]
+        stage_block = stage_blocks[stage]
+        planes = 64 * 2**stage
+        inplanes = 64 * 2**(stage - 1) * block.expansion
+
+        res_layer = _ResLayer(
+            block,
+            inplanes,
+            planes,
+            stage_block,
+            stride=stride,
+            dilation=dilation,
+            style=style,
+            with_cp=with_cp,
+            norm_cfg=self.norm_cfg,
+            dcn=dcn)
+        self.add_module(f'layer{stage + 1}', res_layer)
+
+        assert not (init_cfg and pretrained), \
+            'init_cfg and pretrained cannot be specified at the same time'
+        if isinstance(pretrained, str):
+            warnings.warn('DeprecationWarning: pretrained is a deprecated, '
+                          'please use "init_cfg" instead')
+            self.init_cfg = dict(type='Pretrained', checkpoint=pretrained)
+        elif pretrained is None:
+            if init_cfg is None:
+                self.init_cfg = [
+                    dict(type='Kaiming', layer='Conv2d'),
+                    dict(
+                        type='Constant',
+                        val=1,
+                        layer=['_BatchNorm', 'GroupNorm'])
+                ]
+        else:
+            raise TypeError('pretrained must be a str or None')
+
+    def forward(self, x):
+        res_layer = getattr(self, f'layer{self.stage + 1}')
+        out = res_layer(x)
+        return out
+
+    def train(self, mode=True):
+        super(ResLayer, self).train(mode)
+        if self.norm_eval:
+            for m in self.modules():
+                if isinstance(m, nn.BatchNorm2d):
+                    m.eval()
