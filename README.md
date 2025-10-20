@@ -48,7 +48,7 @@ BLADE builds on the outstanding work and open-source contributions of many teams
 
 - **[Depth Anything v2 (metric)](https://huggingface.co/depth-anything)** — depth encoder's features are used in our DepthNet.
   
-- **[Sapiens Pose](https://huggingface.co/facebook/sapiens-pose-1b) / [RTMDet](https://github.com/open-mmlab/mmdetection)** — human segmenter and keypoint models used in our preprocessing pipeline.
+- **[MediaPipe](https://chuoling.github.io/mediapipe/) & [Sapiens Pose](https://huggingface.co/facebook/sapiens-pose-1b) & [RTMDet](https://github.com/open-mmlab/mmdetection)** — human segmenter and keypoint models used in our preprocessing pipeline.
 
 - **[AiOS](https://github.com/SMPLCap/AiOS) & [ControlNet](https://github.com/lllyasviel/ControlNet)** — basis for our pelvis-depth conditioned PoseNet.
 
@@ -56,6 +56,8 @@ BLADE builds on the outstanding work and open-source contributions of many teams
 **[HuMMan](https://caizhongang.com/projects/HuMMan/)**, **[Human3.6M](https://vision.imar.ro/human3.6m/)**, **[PDHuman](https://github.com/SMPLCap/Zolly)**, **[SPEC](https://spec.is.tue.mpg.de/)**, **[BEDLAM](https://bedlam.is.tue.mpg.de/)** (basis for our BEDLAM-CC renders)  
 
 If you use BLADE in your research, please also **cite the original works** for any datasets/models you use alongside our paper.
+
+For business inquiries, please visit our website and submit the form: [NVIDIA Research Licensing](https://www.nvidia.com/en-us/research/inquiries/).
 
 ## 🛠️ Installation
 
