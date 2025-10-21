@@ -155,10 +155,9 @@ Although we can't share the photos used in our paper due to license limitations,
 ```bash
 MINI_BATCHSIZE=5 python api/test_api.py ./demo_images/
 ```
+You could enable/disable pose & depth optimization by setting `opt_pose` and `opt_tz` in `blade/configs/blade_inthewild.py`
 
-> **Note**: 
-> 1. Enable/Disable pose & depth optimization by setting `opt_pose` and `opt_tz` in `blade/configs/blade_inthewild.py`
-> 2. If you see issue related to EGL or XRender (often on monitor-less servers like SLURM), do:
+> **Note**: If you see issue related to EGL or XRender (often on monitor-less servers like SLURM), do:
 > ```bash
 > export PYGLET_HEADLESS=True
 > export PYOPENGL_PLATFORM=egl
