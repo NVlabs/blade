@@ -270,7 +270,7 @@ Numbers can be slightly different each time due to randomness in camera optimiza
 | TokenHMR   | 0.909 | 0.436 | 0.095 | 112.1 |       64.2 |   107.1 | 124.3 |   49.8 |     19.0 |
 | AiOS       | 1.035 | 0.464 | 0.121 | 112.1 |       62.8 |   101.6 | 110.9 |   48.7 |     11.3 |
 | In Paper   | 0.127 | 0.112 | 0.044 | 15.9 |       56.7 |    94.1 |  99.6 |   69.9 |     41.5 |
-| reproduced | 0.135 | 0.122 | 0.054 | 18.0 |       56.8 |    93.9 | 102.0 |   67.9 |     39.4 |
+| re-trained | 0.135 | 0.122 | 0.054 | 18.0 |       56.8 |    93.9 | 102.0 |   67.9 |     39.4 |
 
 ### HuMMan (in-studio capture)
 | Method | Tz (m) ↓ | 1/Tz ↓ | Txy (m) ↓ | f (%) ↓ | PA-MPJPE ↓ | MPJPE ↓ | PVE ↓ | mIoU ↑ | P-mIoU ↑ |
@@ -278,7 +278,7 @@ Numbers can be slightly different each time due to randomness in camera optimiza
 | TokenHMR | 2.599 | 0.307 | 0.044 | 41.6 |       46.4 |    72.2 |  82.0 | 60.9 |     31.1 |
 | AiOS | 2.311 | 0.292 | 0.033 | 41.6 |       66.1 |    91.8 |  99.4 | 72.0 |     44.3 |
 | In Paper | 0.187 | 0.058 | 0.056 | 8.3 |       23.8 |    41.1 |  52.3 | 70.6 |     38.2 |
-| reproduced | 0.149 | 0.045 | 0.059 | 5.6 |       27.8 |    44.4 |  52.1 | 71.0 |     41.9 |
+| re-trained | 0.149 | 0.045 | 0.059 | 5.6 |       27.8 |    44.4 |  52.1 | 71.0 |     41.9 |
 
 ### PDHuman (synthetic)
 | Method     | Tz (m) ↓ | 1/Tz ↓ | Txy (m) ↓ | f (%) ↓ | PA-MPJPE ↓ | MPJPE ↓ | PVE ↓ | mIoU ↑ | P-mIoU ↑ |
@@ -286,7 +286,7 @@ Numbers can be slightly different each time due to randomness in camera optimiza
 | TokenHMR   | 2.280 | 1.034 | 0.068 |    55.0 |       92.1 |   141.5 | 156.7 |   53.0 |     27.8 |
 | AiOS       | 2.312 | 1.024 | 0.149 |    55.0 |      106.6 |   170.6 | 183.4 |   49.5 |     16.0 |
 | In Paper   | 0.107 | 0.178 | 0.049 |    22.3 |       61.4 |    90.1 | 102.6 |   65.2 |     41.4 |
-| reproduced | 0.110 | 0.185 | 0.109 |    21.5 |       67.0 |   101.9 | 116.2 |   62.3 |     38.6 |
+| re-trained | 0.110 | 0.185 | 0.109 |    21.5 |       67.0 |   101.9 | 116.2 |   62.3 |     38.6 |
 >**Note**: As mentioned in our paper, we found that PDHuman's groundtruth labels do not align with the images well
 
 
