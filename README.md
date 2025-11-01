@@ -151,11 +151,13 @@ blade_repo/
 ## 🚀 Usage
 
 ### Quick Demo
-Although we can't share the photos used in our paper due to license limitations, we provide some CC0-licensed images for users to test quickly
+Although we can't share the photos used in our paper due to license limitations, we provide some CC0-licensed images for users to test quickly.
+
+For in-the-wild demos, we enable pose & depth optimization by default (`opt_pose=True` and `opt_tz=True` in `blade/configs/blade_inthewild.py`)
+If you are running numeric evaluation, please turn off pose and depth optimization because the optimization could fail due to various factors such as bad 2D keypoint detections or segmentations.
 ```bash
 MINI_BATCHSIZE=5 python api/test_api.py ./demo_images/
 ```
-You could enable/disable pose & depth optimization by setting `opt_pose` and `opt_tz` in `blade/configs/blade_inthewild.py`
 
 > **Note**: If you see issue related to EGL or XRender (often on monitor-less servers like SLURM), do:
 > ```bash
@@ -167,7 +169,7 @@ You could enable/disable pose & depth optimization by setting `opt_pose` and `op
 
 **Samples You Should See:**
 
-results are written to `results/test_demo` by default. 
+Results are written to `results/test_demo` by default. You should see mesh overlaid on **Segmented** images like below, otherwise the mediapipe human segmentation failed and the camera solver would be less accurate.
 <p align="center">
   <img src="assets/demo_results.png" alt="BLADE pipeline" width="70%">
 </p>
