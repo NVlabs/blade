@@ -88,8 +88,12 @@ cd ..; pip install  --no-warn-conflict numpy==1.23.1
 
 > **Note:** Ignore numpy version warnings - they don't affect functionality.
 
-### For CUDA 13+ Users
-See [INSTALL_CUDA13.md](docs/INSTALL_CUDA13.md) for detailed CUDA 13+ setup instructions.
+### For non-CUDA 11.8 Users (e.g. CUDA 12 & CUDA 13)
+If you don't want to install another cuda, try changing the `cu118` in the above commands to your version. This sometimes works, depending on whether pytorch and pytorch3d has a matching version for you.
+
+The more reliable way would be following this guide (requires installing CUDA 11.8) [INSTALL_CUDA13.md](docs/INSTALL_CUDA13.md) for detailed non-CUDA 11.8 instructions.
+
+FYI a system could have multiple versions of CUDA at the same time.
 
 
 ## 📦 Download Models
