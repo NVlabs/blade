@@ -102,6 +102,7 @@ FYI a system could have multiple versions of CUDA at the same time.
 ```bash
 # Install HuggingFace CLI
 pip install "huggingface_hub[cli]"
+huggingface-cli login
 # Note: You might need to set up your HuggingFace token in order to download
 
 # Download BLADE checkpoint
